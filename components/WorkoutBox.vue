@@ -1,0 +1,44 @@
+<template>
+  <div>
+    <v-card-title class="d-flex justify-space-between">
+      <p>
+        {{ header }}
+      </p>
+      <v-icon>mdi-plus</v-icon>
+    </v-card-title>
+    <v-expansion-panels popout>
+      <v-expansion-panel v-for="muscle in filteredMuscles" :key="muscle">
+        <v-expansion-panel-header
+          class="text-capitalize font-weight-bold text-h5"
+        >
+          {{ muscle }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content
+          v-for="item in items.filter(item => item.muscle == muscle)"
+          :key="item.id"
+          class="pl-6"
+        >
+          {{ item.name }}
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </div>
+</template>
+
+<script>
+export default {
+  props: ["header", "items"],
+  data() {
+    return {};
+  },
+  computed: {
+    filteredMuscles: function() {
+      const that = this;
+      let filtered = that.items.map(item => item.muscle);
+      filtered = new Set(filtered);
+      filtered = Array.from(filtered);
+      return filtered;
+    }
+  }
+};
+</script>

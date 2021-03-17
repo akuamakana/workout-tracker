@@ -1,0 +1,21 @@
+{
+  "name": "workout-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "firebase": "^8.3.0",
+    "nuxt": "^2.14.12",
+    "vuefire": "^2.2.5"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.3",
+    "nuxt-vite": "^0.0.36"
+  }
+}
