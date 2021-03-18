@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <v-container>
     <v-card-title class="d-flex justify-space-between">
       <p>
         {{ header }}
       </p>
       <v-icon>mdi-plus</v-icon>
     </v-card-title>
-    <v-expansion-panels popout>
+    <v-expansion-panels>
       <v-expansion-panel v-for="muscle in filteredMuscles" :key="muscle">
         <v-expansion-panel-header
           class="text-capitalize font-weight-bold text-h5"
@@ -22,7 +22,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-  </div>
+  </v-container>
 </template>
 
 <script>
