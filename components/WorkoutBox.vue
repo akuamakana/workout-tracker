@@ -9,16 +9,30 @@
     <v-expansion-panels>
       <v-expansion-panel v-for="muscle in filteredMuscles" :key="muscle">
         <v-expansion-panel-header
-          class="text-capitalize font-weight-bold text-h5"
+          class="text-capitalize font-weight-medium text-h5"
         >
           {{ muscle }}
         </v-expansion-panel-header>
         <v-expansion-panel-content
           v-for="item in items.filter(item => item.muscle == muscle)"
           :key="item.id"
-          class="pl-6"
         >
-          {{ item.name }}
+          <v-container class="d-flex align-center">
+            <v-row align-content="space-between" justify="space-between">
+              <v-col>
+                <p>
+                  {{ item.name }}
+                </p>
+              </v-col>
+              <v-col>
+                <v-btn>
+                  <v-icon dark>
+                    mdi-plus
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -42,3 +56,9 @@ export default {
   }
 };
 </script>
+
+<style>
+justify-self-end {
+  justify-self: end;
+}
+</style>

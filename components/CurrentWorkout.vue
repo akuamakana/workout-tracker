@@ -6,6 +6,9 @@
           Workout
         </p>
         <p>
+          {{ this.currentWorkout[0].id }}
+        </p>
+        <p>
           March 16, 2021
         </p>
       </v-card-title>
@@ -13,12 +16,39 @@
         <v-card
           v-for="(exercise, i) in currentWorkout[0].exercises"
           :key="i"
-          class="mb-8"
+          class="mb-4"
         >
-          <v-card-title> {{ exercise.name }} - {{ exercise.id }} </v-card-title>
-          <v-card-text>
-            {{ exercise.name }} - {{ exercise.id }}
-          </v-card-text>
+          <v-card-title>
+            {{ exercise.exercise.name }} - {{ exercise.exercise.id }}
+          </v-card-title>
+          <v-container>
+            <v-row>
+              <v-col
+                v-if="exercise.sets"
+                class="d-inline-flex"
+                cols="2"
+                v-for="set in exercise.sets"
+                :key="set.index"
+              >
+                <v-card-text
+                  class="font-weight-bold text-button"
+                  v-bind:class="{ 'px-0': set.index !== 0 }"
+                >
+                  {{ set.weight }} LBS<br />
+                  {{ set.reps }} REPS
+                </v-card-text>
+              </v-col>
+              <v-col align-self="center">
+                <v-card-text>
+                  <v-btn tile large elevation="0">
+                    <v-icon dark>
+                      mdi-plus
+                    </v-icon>
+                  </v-btn>
+                </v-card-text>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
       </v-container>
     </v-card>
@@ -31,29 +61,10 @@ export default {
   data() {
     return {
       currentWorkout: null,
-      timestamp: "2021-03-17",
-      test: "workouts",
+      timestamp: "2021-03-16"
     };
   },
-  methods: {
-    getReps(id) {
-      db
-        .collection("exercises")
-        .doc(id)
-    }
-  },
-  // Set date if not referenced
-  mounted() {
-    // if (!date) {
-    //   let currentDate = new Date();
-    //   currentDate.get;
-    // }
-  },
-  // firestore: {
-  //   // currentWorkout: db
-  //   //   .collection("workouts")
-  //   //   .where("date", ">", new Date(timestamp))
-  // }
+  methods: {},
   watch: {
     timestamp: {
       immediate: true,
