@@ -25,7 +25,7 @@
                 </p>
               </v-col>
               <v-col>
-                <v-btn>
+                <v-btn @click="addExerciseToWorkout(item.id)">
                   <v-icon dark>
                     mdi-plus
                   </v-icon>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: ["header", "items"],
   data() {
@@ -53,6 +54,9 @@ export default {
       filtered = Array.from(filtered);
       return filtered;
     }
+  },
+  methods: {
+    ...mapActions(["addExerciseToWorkout"])
   }
 };
 </script>

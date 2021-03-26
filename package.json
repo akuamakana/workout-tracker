@@ -11,8 +11,11 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "firebase": "^8.3.0",
+    "net": "^1.0.2",
     "nuxt": "^2.14.12",
-    "vuefire": "^2.2.5"
+    "vue-promised": "^2.0.3",
+    "vuefire": "^2.2.5",
+    "vuexfire": "^3.2.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3",
