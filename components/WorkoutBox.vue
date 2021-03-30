@@ -43,9 +43,6 @@
 import { mapActions } from "vuex";
 export default {
   props: ["header", "items"],
-  data() {
-    return {};
-  },
   computed: {
     filteredMuscles: function() {
       const that = this;

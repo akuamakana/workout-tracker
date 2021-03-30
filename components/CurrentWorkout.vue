@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-card height="750px" max-height="750px">
+      <!-- Card title -->
       <v-card-title class="d-flex justify-space-between">
         <p>
           Workout
@@ -9,6 +10,7 @@
           March 16, 2021
         </p>
       </v-card-title>
+      <!-- Card contents -->
       <v-container v-if="currentWorkoutExercises">
         <v-card
           v-for="(exercise, i) in currentWorkoutExercises"
