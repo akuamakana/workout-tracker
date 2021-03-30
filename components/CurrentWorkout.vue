@@ -16,36 +16,22 @@
           class="mb-4"
         >
           <v-card-title>
-            {{ exercise.referenceID.name }}
+            <v-container class="d-flex justify-space-between align-center">
+              <p>
+                {{ exercise.referenceID.name }}
+              </p>
+              <v-btn color="error">
+                <v-icon @click="deleteExerciseFromWorkout(exercise.id)">
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+            </v-container>
           </v-card-title>
-          <v-container>
-            <v-row>
-              <v-col
-                v-if="exercise.reps"
-                class="d-inline-flex"
-                cols="2"
-                v-for="(rep, i) in exercise.reps"
-                :key="i"
-              >
-                <v-card-text
-                  class="font-weight-bold text-button"
-                  v-bind:class="{ 'px-0': i !== 0 }"
-                >
-                  {{ exercise.weight[i] }} LBS<br />
-                  {{ exercise.reps[i] }} REPS
-                </v-card-text>
-              </v-col>
-              <v-col align-self="center">
-                <v-card-text>
-                  <v-btn tile large elevation="0">
-                    <v-icon dark>
-                      mdi-plus
-                    </v-icon>
-                  </v-btn>
-                </v-card-text>
-              </v-col>
-            </v-row>
-          </v-container>
+          <exercise-card
+            :exercise="exercise"
+            :exerciseID="exercise.id"
+            :currentWorkoutID="currentWorkout.id"
+          />
         </v-card>
       </v-container>
     </v-card>
@@ -53,32 +39,17 @@
 </template>
 
 <script>
-import { db } from "../firebase/db";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
-  data() {
-    return {
-      test: ""
-    };
-  },
   methods: {
-    // ...mapActions(['setDate'])
-    getExerciseName(id) {
-      let myDoc = db.collection("exercises").doc(id).get();
-      myDoc.then(doc => {
-        console.log(doc.data())
-        return doc.data()
-        })
-      return myDoc.then(doc => doc.data())
-    }
+    ...mapActions(["deleteExerciseFromWorkout"])
   },
-  created() {},
   computed: {
-    ...mapGetters(["currentWorkout", "currentWorkoutExercises"])
+    ...mapGetters(["currentWorkoutExercises", "currentWorkout"])
   },
   async mounted() {
     try {
-      await this.$store.dispatch("bindCurrentWorkoutExercises");
+      await this.$store.dispatch("bindCurrentWorkout");
     } catch (e) {
       console.error(e);
     }

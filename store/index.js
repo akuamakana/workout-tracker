@@ -1,7 +1,5 @@
-import Vuex from "vuex";
 import { vuexfireMutations, firestoreAction } from "vuexfire";
 import { db } from "../firebase/db";
-import firebase from "firebase";
 import "firebase/firestore";
 
 export const state = () => ({
@@ -13,41 +11,45 @@ export const state = () => ({
 export const mutations = { ...vuexfireMutations };
 
 export const actions = {
-  bindCurrentWorkout: firestoreAction(async ({ bindFirestoreRef, state }) => {
-    // return the promise returned by `bindFirestoreRef`
-    console.log("Running dispatch BindFirebaseUser");
-    await bindFirestoreRef(
-      "currentWorkout",
-      db
-        .collection("workouts")
-        .where("timestamp", ">", new Date(state.date))
-    );
-    console.log(state.currentWorkout);
-  }),
   addExerciseToWorkout: firestoreAction(({ state }, payload) => {
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
-      .update({
-        exercises: [
-          {
-            exercise: db.doc(`exercises/${payload}`),
-            sets: [{ index: 0, reps: 15, weight: 300 }]
-          }
-        ]
+      .collection("workout")
+      .add({
+        exerciseID: payload,
+        referenceID: db.doc("exercises/" + payload)
       });
   }),
-  bindCurrentWorkoutExercises: firestoreAction(async ({ bindFirestoreRef, state }, payload) => {
-    console.log("bindCurrentWorkoutExercises is running")
-    await bindFirestoreRef(
-      "currentWorkout",
-      db
-        .collection("workouts")
-        .where("timestamp", ">", new Date(state.date))
-    );
-    await bindFirestoreRef(
-      "currentWorkoutExercises",
-      db.collection("workouts").doc(state.currentWorkout[0].id).collection("workout")
-    )
+  bindCurrentWorkout: firestoreAction(
+    async ({ bindFirestoreRef, state }, payload) => {
+      console.log("bindCurrentWorkoutExercises is running");
+      await bindFirestoreRef(
+        "currentWorkout",
+        db.collection("workouts").where("timestamp", ">", new Date(state.date))
+      );
+      await bindFirestoreRef(
+        "currentWorkoutExercises",
+        db
+          .collection("workouts")
+          .doc(state.currentWorkout[0].id)
+          .collection("workout")
+      );
+    }
+  ),
+  deleteExerciseFromWorkout: firestoreAction(({ state }, exerciseID) => {
+    db.collection("workouts")
+      .doc(state.currentWorkout[0].id)
+      .collection("workout")
+      .doc(exerciseID)
+      .delete();
+  }),
+  addSetToExercise: firestoreAction(({ state }, exerciseID) => {
+    db.collection("workouts")
+      .doc(state.currentWorkout[0].id)
+      .collection("workout")
+      .doc(exerciseID)
+      .collection("sets")
+      .add({ reps: 13, weight: 225 });
   })
 };
 
@@ -56,6 +58,6 @@ export const getters = {
     return state.currentWorkout[0];
   },
   currentWorkoutExercises(state) {
-    return state.currentWorkoutExercises
+    return state.currentWorkoutExercises;
   }
 };

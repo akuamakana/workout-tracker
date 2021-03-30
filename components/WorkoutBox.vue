@@ -60,9 +60,3 @@ export default {
   }
 };
 </script>
-
-<style>
-justify-self-end {
-  justify-self: end;
-}
-</style>
