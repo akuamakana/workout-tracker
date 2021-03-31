@@ -10,7 +10,7 @@
         :key="set.id"
       >
         <v-container>
-          <v-btn text x-large>
+          <v-btn text x-large @click="editSet(set.id)">
             <div>
               <p class="mb-0 pb-2">{{ set.weight }} LBS</p>
               <p class="mb-0">{{ set.reps }} REPS</p>
@@ -29,7 +29,14 @@
         </v-container>
       </v-col>
     </v-row>
-    <sets-modal @close="modalAction" :dialog="dialog" :exerciseID="exerciseID" />
+    <!-- Open modal for set add/change -->
+    <sets-modal
+      @close="modalAction"
+      @clear="clearModal"
+      :dialog="dialog"
+      :exerciseID="exerciseID"
+      :setID="setID"
+    />
   </v-container>
 </template>
 
@@ -41,7 +48,8 @@ export default {
   data() {
     return {
       sets: [],
-      dialog: false
+      dialog: false,
+      setID: ""
     };
   },
   created() {
@@ -62,6 +70,14 @@ export default {
     ...mapActions(["addSetToExercise"]),
     modalAction() {
       this.dialog = !this.dialog;
+    },
+    editSet(setID) {
+      this.setID = setID;
+      this.modalAction();
+    },
+    clearModal() {
+      this.dialog = !this.dialog;
+      this.setID = "";
     }
   }
 };

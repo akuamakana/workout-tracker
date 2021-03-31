@@ -44,6 +44,15 @@ export const actions = {
       .doc(exerciseID)
       .delete();
   }),
+  deleteSetFromExercise: firestoreAction(({ state }, payload) => {
+    db.collection("workouts")
+      .doc(state.currentWorkout[0].id)
+      .collection("workout")
+      .doc(payload.exerciseID)
+      .collection("sets")
+      .doc(payload.setID)
+      .delete();
+  }),
   addSetToExercise: firestoreAction(({ state }, payload) => {
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
@@ -51,6 +60,16 @@ export const actions = {
       .doc(payload.exerciseID)
       .collection("sets")
       .add({ weight: payload.weight, reps: payload.reps });
+  }),
+  updateSet: firestoreAction(({ state }, payload) => {
+    db.collection("workouts")
+      .doc(state.currentWorkout[0].id)
+      .collection("workout")
+      .doc(payload.exerciseID)
+      .collection("sets")
+      .doc(payload.setID)
+      .update({ weight: payload.weight, reps: payload.reps });
+    console.log('update store')
   })
 };
 

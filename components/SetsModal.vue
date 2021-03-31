@@ -30,11 +30,24 @@
         </v-card-text>
         <v-card-actions class="pb-6">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="$emit('close')"
+          <v-btn
+            v-if="setID"
+            color="red darken-1"
+            text
+            @click="removeSetFromExercise"
+            >Delete</v-btn
+          >
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="setID ? $emit('clear') : $emit('close')"
             >Close</v-btn
           >
-          <v-btn color="blue darken-1" text @click="saveSetToExercise"
-            >Save</v-btn
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="setID ? updateSetFromExercise() : saveSetToExercise()"
+            >{{ setID ? "Update" : "Save" }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -45,7 +58,7 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  props: ["dialog", "exerciseID"],
+  props: ["dialog", "exerciseID", "setID"],
   data() {
     return {
       weight: "",
@@ -53,15 +66,32 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addSetToExercise"]),
+    ...mapActions(["addSetToExercise", "deleteSetFromExercise", "updateSet"]),
     saveSetToExercise() {
       this.addSetToExercise({
         exerciseID: this.exerciseID,
         weight: this.weight,
         reps: this.reps
       });
-      console.log(this.exerciseID);
       this.$emit("close");
+      this.weight = "";
+      this.reps = "";
+    },
+    removeSetFromExercise() {
+      this.deleteSetFromExercise({
+        exerciseID: this.exerciseID,
+        setID: this.$props.setID
+      });
+      this.$emit("clear");
+    },
+    updateSetFromExercise() {
+      this.updateSet({
+        exerciseID: this.exerciseID,
+        setID: this.$props.setID,
+        weight: this.weight,
+        reps: this.reps
+      });
+      this.$emit("clear");
       this.weight = "";
       this.reps = "";
     }
