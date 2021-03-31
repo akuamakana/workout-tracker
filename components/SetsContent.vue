@@ -21,7 +21,7 @@
       <!-- Add set to exercise button -->
       <v-col>
         <v-container>
-          <v-btn x-large @click="addSetToExercise(exerciseID)">
+          <v-btn x-large @click="modalAction">
             <v-icon dark>
               mdi-plus
             </v-icon>
@@ -29,6 +29,7 @@
         </v-container>
       </v-col>
     </v-row>
+    <sets-modal @close="modalAction" :dialog="dialog" :exerciseID="exerciseID" />
   </v-container>
 </template>
 
@@ -39,11 +40,12 @@ export default {
   props: ["exerciseID", "exercise", "currentWorkoutID"],
   data() {
     return {
-      sets: []
+      sets: [],
+      dialog: false
     };
   },
   created() {
-    const that = this
+    const that = this;
     const eID = that.$props.exerciseID;
     const cwID = that.$props.currentWorkoutID;
     this.$bind(
@@ -57,7 +59,10 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["addSetToExercise"])
+    ...mapActions(["addSetToExercise"]),
+    modalAction() {
+      this.dialog = !this.dialog;
+    }
   }
 };
 </script>

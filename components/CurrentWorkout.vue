@@ -29,12 +29,13 @@
               </v-btn>
             </v-container>
           </v-card-title>
-          <exercise-card
+          <sets-content
             :exercise="exercise"
             :exerciseID="exercise.id"
             :currentWorkoutID="currentWorkout.id"
           />
         </v-card>
+        <sets-modal />
       </v-container>
     </v-card>
   </v-container>

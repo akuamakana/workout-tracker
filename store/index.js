@@ -13,7 +13,7 @@ export const mutations = { ...vuexfireMutations };
 export const actions = {
   addExerciseToWorkout: firestoreAction(({ state }, exerciseID) => {
     // Check if exercise in workout
-    db.collection("workouts")
+    // db.collection("workouts")
     // Add exercise to workout
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
@@ -23,22 +23,20 @@ export const actions = {
         referenceID: db.doc("exercises/" + exerciseID)
       });
   }),
-  bindCurrentWorkout: firestoreAction(
-    async ({ bindFirestoreRef, state }) => {
-      console.log("bindCurrentWorkoutExercises is running");
-      await bindFirestoreRef(
-        "currentWorkout",
-        db.collection("workouts").where("timestamp", ">", new Date(state.date))
-      );
-      await bindFirestoreRef(
-        "currentWorkoutExercises",
-        db
-          .collection("workouts")
-          .doc(state.currentWorkout[0].id)
-          .collection("workout")
-      );
-    }
-  ),
+  bindCurrentWorkout: firestoreAction(async ({ bindFirestoreRef, state }) => {
+    console.log("bindCurrentWorkoutExercises is running");
+    await bindFirestoreRef(
+      "currentWorkout",
+      db.collection("workouts").where("timestamp", ">", new Date(state.date))
+    );
+    await bindFirestoreRef(
+      "currentWorkoutExercises",
+      db
+        .collection("workouts")
+        .doc(state.currentWorkout[0].id)
+        .collection("workout")
+    );
+  }),
   deleteExerciseFromWorkout: firestoreAction(({ state }, exerciseID) => {
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
@@ -46,13 +44,13 @@ export const actions = {
       .doc(exerciseID)
       .delete();
   }),
-  addSetToExercise: firestoreAction(({ state }, exerciseID) => {
+  addSetToExercise: firestoreAction(({ state }, payload) => {
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
-      .doc(exerciseID)
+      .doc(payload.exerciseID)
       .collection("sets")
-      .add({ reps: 13, weight: 225 });
+      .add({ weight: payload.weight, reps: payload.reps });
   })
 };
 
