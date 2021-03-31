@@ -31,13 +31,6 @@
         <v-card-actions class="pb-6">
           <v-spacer></v-spacer>
           <v-btn
-            v-if="setID"
-            color="red darken-1"
-            text
-            @click="removeSetFromExercise"
-            >Delete</v-btn
-          >
-          <v-btn
             color="blue darken-1"
             text
             @click="setID ? $emit('clear') : $emit('close')"
@@ -48,6 +41,13 @@
             text
             @click="setID ? updateSetFromExercise() : saveSetToExercise()"
             >{{ setID ? "Update" : "Save" }}</v-btn
+          >
+          <v-btn
+            v-if="setID"
+            color="red darken-1"
+            text
+            @click="removeSetFromExercise"
+            >Delete</v-btn
           >
         </v-card-actions>
       </v-card>
