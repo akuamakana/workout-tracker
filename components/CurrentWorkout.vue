@@ -3,12 +3,14 @@
     <v-card height="750px" max-height="750px">
       <!-- Card title -->
       <v-card-title class="d-flex justify-space-between">
-        <p>
-          Workout
-        </p>
-        <p>
-          March 16, 2021
-        </p>
+        <v-col>
+          <p>
+            Workout
+          </p>
+        </v-col>
+        <v-col>
+          <date-picker></date-picker>
+        </v-col>
       </v-card-title>
       <!-- Card contents -->
       <v-container v-if="currentWorkoutExercises">
@@ -30,6 +32,7 @@
             </v-container>
           </v-card-title>
           <sets-content
+            v-if="currentWorkout"
             :exercise="exercise"
             :exerciseID="exercise.id"
             :currentWorkoutID="currentWorkout.id"

@@ -70,8 +70,8 @@ export default {
     saveSetToExercise() {
       this.addSetToExercise({
         exerciseID: this.exerciseID,
-        weight: this.weight,
-        reps: this.reps
+        weight: parseInt(this.weight),
+        reps: parseInt(this.reps)
       });
       this.$emit("close");
       this.weight = "";
@@ -88,8 +88,8 @@ export default {
       this.updateSet({
         exerciseID: this.exerciseID,
         setID: this.$props.setID,
-        weight: this.weight,
-        reps: this.reps
+        weight: parseInt(this.weight),
+        reps: parseInt(this.reps)
       });
       this.$emit("clear");
       this.weight = "";

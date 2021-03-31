@@ -5,10 +5,15 @@ import "firebase/firestore";
 export const state = () => ({
   currentWorkout: [],
   currentWorkoutExercises: null,
-  date: "2021-03-24"
+  date: ""
 });
 
-export const mutations = { ...vuexfireMutations };
+export const mutations = {
+  ...vuexfireMutations,
+  setDate(state, date) {
+    state.date = date;
+  }
+};
 
 export const actions = {
   addExerciseToWorkout: firestoreAction(({ state }, exerciseID) => {
@@ -23,19 +28,32 @@ export const actions = {
         referenceID: db.doc("exercises/" + exerciseID)
       });
   }),
-  bindCurrentWorkout: firestoreAction(async ({ bindFirestoreRef, state }) => {
-    console.log("bindCurrentWorkoutExercises is running");
-    await bindFirestoreRef(
-      "currentWorkout",
-      db.collection("workouts").where("timestamp", ">", new Date(state.date))
-    );
-    await bindFirestoreRef(
-      "currentWorkoutExercises",
-      db
-        .collection("workouts")
-        .doc(state.currentWorkout[0].id)
-        .collection("workout")
-    );
+  bindCurrentWorkout: firestoreAction(
+    async ({ bindFirestoreRef, unbindFirestoreRef, state }) => {
+      // Bind currentWorkout by date
+      await bindFirestoreRef(
+        "currentWorkout",
+        db
+          .collection("workouts")
+          .where("timestamp", ">=", new Date(state.date + " 00:00"))
+          .where("timestamp", "<=", new Date(state.date + " 23:59"))
+      );
+      console.log(new Date(state.date + " 00:00"));
+      // Bind currentWorkoutExercises with id
+      if (state.currentWorkout[0]) {
+        await bindFirestoreRef(
+          "currentWorkoutExercises",
+          db
+            .collection("workouts")
+            .doc(state.currentWorkout[0].id)
+            .collection("workout")
+        );
+      }
+    }
+  ),
+  unbindCurrentWorkout: firestoreAction(({ unbindFirestoreRef }) => {
+    unbindFirestoreRef("currentWorkoutExercises");
+    unbindFirestoreRef("currentWorkout");
   }),
   deleteExerciseFromWorkout: firestoreAction(({ state }, exerciseID) => {
     db.collection("workouts")
@@ -69,7 +87,6 @@ export const actions = {
       .collection("sets")
       .doc(payload.setID)
       .update({ weight: payload.weight, reps: payload.reps });
-    console.log('update store')
   })
 };
 
