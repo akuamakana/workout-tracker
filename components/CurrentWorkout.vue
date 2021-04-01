@@ -2,24 +2,24 @@
   <v-container>
     <v-card height="750px" max-height="750px">
       <!-- Card title -->
-      <v-card-title class="d-flex justify-space-between">
+      <v-card-title class="d-flex justify-space-between mb-n8">
         <v-col>
           <p>
             Workout
           </p>
         </v-col>
-        <v-col>
+        <v-col cols="5">
           <date-picker></date-picker>
         </v-col>
       </v-card-title>
       <!-- Card contents -->
-      <v-container v-if="currentWorkoutExercises">
+      <v-container style="overflow:auto" v-if="currentWorkoutExercises">
         <v-card
           v-for="(exercise, i) in currentWorkoutExercises"
           :key="i"
           class="mb-4"
         >
-          <v-card-title>
+          <v-card-title class="mb-n8">
             <v-container class="d-flex justify-space-between align-center">
               <p>
                 {{ exercise.referenceID.name }}
@@ -40,21 +40,27 @@
         </v-card>
         <sets-modal />
       </v-container>
+      <v-container class="d-flex my-4" style="justify-content:center">
+        <exercise-modal></exercise-modal>
+      </v-container>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import { format, parseISO } from "date-fns";
 export default {
   methods: {
-    ...mapActions(["deleteExerciseFromWorkout"])
+    ...mapActions(["deleteExerciseFromWorkout"]),
+    ...mapMutations(["setDate"])
   },
   computed: {
     ...mapGetters(["currentWorkoutExercises", "currentWorkout"])
   },
   async mounted() {
     try {
+      this.setDate(format(parseISO(new Date().toISOString()), "yyyy-MM-dd"));
       await this.$store.dispatch("bindCurrentWorkout");
     } catch (e) {
       console.error(e);
@@ -62,3 +68,19 @@ export default {
   }
 };
 </script>
+
+<style>
+html {
+  overflow: hidden !important;
+}
+
+.v-card {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.v-card__text {
+  flex-grow: 1;
+  overflow: auto;
+}
+</style>

@@ -18,9 +18,9 @@
           :key="item.id"
         >
           <v-container class="d-flex align-center">
-            <v-row align-content="space-between" justify="space-between">
+            <v-row justify="space-between">
               <v-col>
-                <p>
+                <p class="">
                   {{ item.name }}
                 </p>
               </v-col>

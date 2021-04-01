@@ -4,13 +4,12 @@
       <!-- Display sets -->
       <v-col
         v-if="sets"
-        class="d-inline-flex"
         cols="2"
         v-for="set in sets"
         :key="set.id"
       >
         <v-container>
-          <v-btn text x-large @click="editSet(set.id)">
+          <v-btn text x-large @click="editSet(set.id)" class="px-0">
             <div>
               <p class="mb-0 pb-2">{{ set.weight }} LBS</p>
               <p class="mb-0">{{ set.reps }} REPS</p>

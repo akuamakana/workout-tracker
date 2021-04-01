@@ -7,7 +7,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="date"
+        :value="formatDate"
         label="Date"
         prepend-icon="mdi-calendar"
         readonly
@@ -29,11 +29,12 @@
 
 <script>
 import { mapMutations, mapActions } from "vuex";
+import { format, parseISO } from "date-fns";
 export default {
   data() {
     return {
       modal: false,
-      date: ""
+      date: format(parseISO(new Date().toISOString()), "yyyy-MM-dd")
     };
   },
   methods: {
@@ -44,8 +45,17 @@ export default {
       this.setDate(date);
       this.modal = false;
       this.$refs.dialog.save(date);
-      this.bindCurrentWorkout();
+      await this.bindCurrentWorkout();
     }
+  },
+  computed: {
+    formatDate() {
+      return this.date ? format(parseISO(this.date), "EEEE, MMMM do yyyy") : "";
+    }
+  },
+  // Mounted: set date to current date by default
+  async mounted() {
+    await this.updateDate(this.date);
   }
 };
 </script>
