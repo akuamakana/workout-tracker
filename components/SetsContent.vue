@@ -2,12 +2,7 @@
   <v-container>
     <v-row>
       <!-- Display sets -->
-      <v-col
-        v-if="sets"
-        cols="2"
-        v-for="set in sets"
-        :key="set.id"
-      >
+      <v-col v-if="sets" cols="2" v-for="set in sets" :key="set.id">
         <v-container>
           <v-btn text x-large @click="editSet(set.id)" class="px-0">
             <div>
@@ -63,6 +58,7 @@ export default {
         .collection("workout")
         .doc(eID)
         .collection("sets")
+        .orderBy("timestamp", "asc")
     );
   },
   methods: {

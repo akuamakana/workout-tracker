@@ -6,6 +6,7 @@ import firebase from "firebase";
 export const state = () => ({
   currentWorkout: [],
   currentWorkoutExercises: null,
+  sortOrder: [],
   date: null
 });
 
@@ -20,7 +21,6 @@ export const actions = {
   // Bind and Unbind
   bindCurrentWorkout: firestoreAction(async ({ bindFirestoreRef, state }) => {
     // Bind currentWorkout by date
-    // console.log(new Date(state.date + " 00:00"));
     await bindFirestoreRef(
       "currentWorkout",
       db
@@ -37,6 +37,10 @@ export const actions = {
           .doc(state.currentWorkout[0].id)
           .collection("workout")
       );
+    }
+    // Bind order for sort
+    if (state.currentWorkout[0]) {
+      await bindFirestoreRef("sortOrder", db.collection("collection"));
     }
   }),
   unbindCurrentWorkout: firestoreAction(({ unbindFirestoreRef }) => {
@@ -90,7 +94,11 @@ export const actions = {
       .collection("workout")
       .doc(payload.exerciseID)
       .collection("sets")
-      .add({ weight: payload.weight, reps: payload.reps });
+      .add({
+        weight: payload.weight,
+        reps: payload.reps,
+        timestamp: firebase.firestore.Timestamp.now()
+      });
   }),
   updateSet: firestoreAction(({ state }, payload) => {
     db.collection("workouts")

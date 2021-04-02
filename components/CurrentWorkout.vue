@@ -12,6 +12,7 @@
           <date-picker></date-picker>
         </v-col>
       </v-card-title>
+
       <!-- Card contents -->
       <v-container style="overflow:auto" v-if="currentWorkoutExercises">
         <v-card
@@ -53,7 +54,7 @@ import { format, parseISO } from "date-fns";
 export default {
   methods: {
     ...mapActions(["deleteExerciseFromWorkout"]),
-    ...mapMutations(["setDate"])
+    ...mapMutations(["setDate"]),
   },
   computed: {
     ...mapGetters(["currentWorkoutExercises", "currentWorkout"])
