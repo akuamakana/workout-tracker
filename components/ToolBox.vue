@@ -1,5 +1,5 @@
 <template>
-  <v-card style="overflow:auto" height="750px" max-height="750px">
+  <v-card style="overflow:auto" height="1000px">
     <workout-box header="Exercise" :items="exercises" />
     <workout-box header="Workout" :items="workouts" />
   </v-card>

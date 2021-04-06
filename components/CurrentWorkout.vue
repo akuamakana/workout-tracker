@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card height="750px" max-height="750px">
+    <v-card height="1000px" max-height="1000px">
       <!-- Card title -->
       <v-card-title class="d-flex justify-space-between mb-n8">
         <v-col>
@@ -16,17 +16,24 @@
       <!-- Card contents -->
       <v-container style="overflow:auto" v-if="currentWorkoutExercises">
         <v-card
-          v-for="(exercise, i) in currentWorkoutExercises"
+          v-for="(exercise, i) in [...currentWorkoutExercises].sort((a, b) => {
+            if (currentWorkout.order) {
+              return (
+                currentWorkout.order.indexOf(a.exerciseID) -
+                currentWorkout.order.indexOf(b.exerciseID)
+              );
+            } else {
+              return;
+            }
+          })"
           :key="i"
           class="mb-4"
         >
           <v-card-title class="mb-n8">
             <v-container class="d-flex justify-space-between align-center">
-              <p>
-                {{ exercise.referenceID.name }}
-              </p>
+              <p>{{ exercise.referenceID.name }} - {{ exercise.exerciseID }}</p>
               <v-btn color="error">
-                <v-icon @click="deleteExerciseFromWorkout(exercise.id)">
+                <v-icon @click="deleteExerciseFromWorkout(exercise)">
                   mdi-delete
                 </v-icon>
               </v-btn>
@@ -54,7 +61,7 @@ import { format, parseISO } from "date-fns";
 export default {
   methods: {
     ...mapActions(["deleteExerciseFromWorkout"]),
-    ...mapMutations(["setDate"]),
+    ...mapMutations(["setDate"])
   },
   computed: {
     ...mapGetters(["currentWorkoutExercises", "currentWorkout"])

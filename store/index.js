@@ -38,10 +38,6 @@ export const actions = {
           .collection("workout")
       );
     }
-    // Bind order for sort
-    if (state.currentWorkout[0]) {
-      await bindFirestoreRef("sortOrder", db.collection("collection"));
-    }
   }),
   unbindCurrentWorkout: firestoreAction(({ unbindFirestoreRef }) => {
     unbindFirestoreRef("currentWorkoutExercises");
@@ -51,8 +47,6 @@ export const actions = {
   // Exercise to workout controller
   addExerciseToWorkout: firestoreAction(
     async ({ state, dispatch }, exerciseID) => {
-      // Check if exercise in workout
-      // db.collection("workouts")
       // Add exercise to workout
       if (state.currentWorkout[0]) {
         db.collection("workouts")
@@ -62,12 +56,22 @@ export const actions = {
             exerciseID: exerciseID,
             referenceID: db.doc("exercises/" + exerciseID)
           });
+        if ("order" in state.currentWorkout[0]) {
+          db.collection("workouts")
+            .doc(state.currentWorkout[0].id)
+            .update({
+              order: [...state.currentWorkout[0].order, exerciseID]
+            });
+        }
       } else {
         // Create new workout
         const newDate = firebase.firestore.Timestamp.fromDate(
           new Date(state.date + "T00:00-0800")
         );
-        db.collection("workouts").add({ timestamp: newDate });
+        db.collection("workouts").add({
+          timestamp: newDate,
+          order: [exerciseID]
+        });
         await dispatch("bindCurrentWorkout", { root: true });
         db.collection("workouts")
           .doc(state.currentWorkout[0].id)
@@ -79,12 +83,21 @@ export const actions = {
       }
     }
   ),
-  deleteExerciseFromWorkout: firestoreAction(({ state }, exerciseID) => {
+  deleteExerciseFromWorkout: firestoreAction(({ state }, exercise) => {
+    const { id, exerciseID } = exercise;
     db.collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
-      .doc(exerciseID)
+      .doc(id)
       .delete();
+    // Delete object from array by id
+    const updatedOrder = [...state.currentWorkout[0].order];
+    updatedOrder.splice(updatedOrder.indexOf(exerciseID), 1);
+    db.collection("workouts")
+      .doc(state.currentWorkout[0].id)
+      .update({
+        order: updatedOrder
+      });
   }),
 
   // Set to exercise controller

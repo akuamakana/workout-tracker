@@ -9,7 +9,7 @@
       <v-col cols="4">
         <tool-box />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="7">
         <current-workout />
       </v-col>
     </v-row>

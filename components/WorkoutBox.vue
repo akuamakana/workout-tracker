@@ -1,5 +1,13 @@
 <template>
   <v-container>
+    <v-alert
+      v-model="isAlerted"
+      transition="slide-x-transition"
+      dismissible
+      text
+      type="error"
+      >Already in current workout</v-alert
+    >
     <v-card-title class="d-flex justify-space-between">
       <p>
         {{ header }}
@@ -18,14 +26,14 @@
           :key="item.id"
         >
           <v-container class="d-flex align-center">
-            <v-row justify="space-between">
-              <v-col>
-                <p class="">
+            <v-row>
+              <v-col class="d-flex align-center">
+                <p class="mb-0">
                   {{ item.name }}
                 </p>
               </v-col>
-              <v-col>
-                <v-btn @click="addExerciseToWorkout(item.id)">
+              <v-col class="d-flex justify-end">
+                <v-btn @click="addExercise(item.id)">
                   <v-icon dark>
                     mdi-plus
                   </v-icon>
@@ -40,9 +48,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["header", "items"],
+  data() {
+    return {
+      isAlerted: false
+    };
+  },
   computed: {
     filteredMuscles: function() {
       const that = this;
@@ -50,10 +63,19 @@ export default {
       filtered = new Set(filtered);
       filtered = Array.from(filtered);
       return filtered;
-    }
+    },
+    ...mapGetters(["currentWorkout"])
   },
   methods: {
-    ...mapActions(["addExerciseToWorkout"])
+    ...mapActions(["addExerciseToWorkout"]),
+    addExercise(itemID) {
+      if (this.currentWorkout.order.includes(itemID)) {
+        this.isAlerted = true;
+        setTimeout(() => (this.isAlerted = false), 2000);
+      } else {
+        this.addExerciseToWorkout(itemID);
+      }
+    }
   }
 };
 </script>
