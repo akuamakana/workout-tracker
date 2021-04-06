@@ -12,8 +12,11 @@
       <p>
         {{ header }}
       </p>
-      <exercise-modal v-if="header == 'Exercise'"
-      :filteredMuscles="filteredMuscles" />
+      <exercise-modal
+        v-if="header == 'Exercise'"
+        icon="mdi-plus"
+        :filteredMuscles="filteredMuscles"
+      />
     </v-card-title>
     <v-expansion-panels>
       <v-expansion-panel v-for="muscle in filteredMuscles" :key="muscle">
@@ -34,7 +37,12 @@
                 </p>
               </v-col>
               <v-col class="d-flex justify-end">
-                <v-btn @click="addExercise(item.id)">
+                <exercise-modal icon="mdi-square-edit-outline" :exercise="item" />
+                <v-btn
+                  class="px-0"
+                  min-width="36px"
+                  @click="addExercise(item.id)"
+                >
                   <v-icon dark>
                     mdi-plus
                   </v-icon>
@@ -50,7 +58,9 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import ExerciseModal from "./ExerciseModal.vue";
 export default {
+  components: { ExerciseModal },
   props: ["header", "items"],
   data() {
     return {

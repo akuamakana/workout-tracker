@@ -93,9 +93,10 @@ export const actions = {
       }
     }
   ),
-  deleteExerciseFromWorkout: firestoreAction(({ state }, exercise) => {
+  deleteExerciseFromWorkout: firestoreAction(async ({ state }, exercise) => {
     const { id, exerciseID } = exercise;
-    db.collection("workouts")
+    await db
+      .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
       .doc(id)
@@ -103,7 +104,8 @@ export const actions = {
     // Delete object from array by id
     const updatedOrder = [...state.currentWorkout[0].order];
     updatedOrder.splice(updatedOrder.indexOf(exerciseID), 1);
-    db.collection("workouts")
+    await db
+      .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .update({
         order: updatedOrder
@@ -148,6 +150,14 @@ export const actions = {
       name: payload.name,
       muscle: payload.muscle.toLowerCase()
     });
+  }),
+  updateExercise: firestoreAction(({}, payload) => {
+    db.collection("exercises")
+      .doc(payload.exerciseID)
+      .update({
+        name: payload.name,
+        muscle: payload.muscle
+      });
   })
 };
 

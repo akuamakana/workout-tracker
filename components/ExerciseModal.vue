@@ -1,8 +1,8 @@
 <template>
-  <v-layout row justify-end>
-    <v-btn @click="dialog = true">
+  <v-layout justify-end>
+    <v-btn class="px-0 mr-2" min-width="36px" @click="modalController">
       <v-icon>
-        mdi-plus
+        {{ icon }}
       </v-icon>
     </v-btn>
     <v-dialog v-model="dialog" max-width="600px">
@@ -15,13 +15,18 @@
         <v-container>
           <v-col>
             <v-row>
-              <v-text-field v-model="name" label="Name"></v-text-field>
+              <v-text-field
+                v-model="name"
+                :rules="rules"
+                label="Name"
+              ></v-text-field>
             </v-row>
             <v-row>
               <v-combobox
                 class="text-capitalize"
                 v-model="muscle"
                 :items="filteredMuscles"
+                :rules="rules"
                 label="Type"
               ></v-combobox>
             </v-row>
@@ -31,7 +36,11 @@
             <v-btn @click="dialog = false" text color="red lighten-1">
               Close
             </v-btn>
-            <v-btn text @click="createNewExercise">Save</v-btn>
+            <v-btn
+              text
+              @click="exercise ? updateCurrentExercise() : createNewExercise()"
+              >{{ exercise ? "Update" : "Save" }}</v-btn
+            >
           </v-card-actions>
         </v-container>
       </v-card>
@@ -42,16 +51,17 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  props: ["filteredMuscles"],
+  props: ["filteredMuscles", "icon", "exercise"],
   data() {
     return {
       dialog: false,
       name: "",
-      muscle: ""
+      muscle: "",
+      rules: [value => !!value || "Required"]
     };
   },
   methods: {
-    ...mapActions(["addExercise"]),
+    ...mapActions(["addExercise", "updateExercise"]),
     createNewExercise() {
       if (!this.name) {
         return;
@@ -66,6 +76,29 @@ export default {
         this.muscle = "";
         this.dialog = false;
       }
+    },
+    updateCurrentExercise() {
+      if (!this.name) {
+        return;
+      }
+      if (!this.muscle) {
+        return;
+      }
+      this.updateExercise({
+        exerciseID: this.exercise.id,
+        name: this.name,
+        muscle: this.muscle
+      });
+      this.dialog = false;
+      this.name = "";
+      this.muscle = "";
+    },
+    modalController() {
+      if (this.exercise) {
+        this.name = this.exercise.name;
+        this.muscle = this.exercise.muscle;
+      }
+      this.dialog = true;
     }
   }
 };
