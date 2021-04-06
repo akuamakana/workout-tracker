@@ -6,6 +6,8 @@ import firebase from "firebase";
 export const state = () => ({
   currentWorkout: [],
   currentWorkoutExercises: null,
+  exercises: [],
+  workouts: [],
   sortOrder: [],
   date: null
 });
@@ -18,7 +20,7 @@ export const mutations = {
 };
 
 export const actions = {
-  // Bind and Unbind
+  // Bind and Unbind currentWorkout
   bindCurrentWorkout: firestoreAction(async ({ bindFirestoreRef, state }) => {
     // Bind currentWorkout by date
     await bindFirestoreRef(
@@ -42,6 +44,14 @@ export const actions = {
   unbindCurrentWorkout: firestoreAction(({ unbindFirestoreRef }) => {
     unbindFirestoreRef("currentWorkoutExercises");
     unbindFirestoreRef("currentWorkout");
+  }),
+
+  // Bind exercises and workouts
+  bindExercises: firestoreAction(async ({ bindFirestoreRef }) => {
+    await bindFirestoreRef("exercises", db.collection("exercises"));
+  }),
+  bindWorkouts: firestoreAction(async ({ bindFirestoreRef }) => {
+    await bindFirestoreRef("workouts", db.collection("saved-workouts"));
   }),
 
   // Exercise to workout controller
@@ -130,6 +140,14 @@ export const actions = {
       .collection("sets")
       .doc(payload.setID)
       .delete();
+  }),
+
+  // Add exercise
+  addExercise: firestoreAction(({ state }, payload) => {
+    db.collection("exercises").add({
+      name: payload.name,
+      muscle: payload.muscle.toLowerCase()
+    });
   })
 };
 
@@ -139,5 +157,11 @@ export const getters = {
   },
   currentWorkoutExercises(state) {
     return state.currentWorkoutExercises;
+  },
+  exercises(state) {
+    return state.exercises;
+  },
+  workouts(state) {
+    return state.workouts;
   }
 };

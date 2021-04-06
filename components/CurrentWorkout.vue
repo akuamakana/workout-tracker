@@ -49,7 +49,7 @@
         <sets-modal />
       </v-container>
       <v-container class="d-flex my-4" style="justify-content:center">
-        <exercise-modal></exercise-modal>
+        <toolbox-modal />
       </v-container>
     </v-card>
   </v-container>

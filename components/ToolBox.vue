@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import { db } from "../firebase/db";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  data() {
-    return {
-      exercises: [],
-      workouts: []
-    };
+  methods: {
+    ...mapActions(["bindExercises", "bindWorkouts"])
   },
-  firestore: {
-    exercises: db.collection("exercises"),
-    workouts: db.collection("saved-workouts")
+  computed: {
+    ...mapGetters(["exercises", "workouts"])
+  },
+  async mounted() {
+    await this.bindExercises();
+    await this.bindWorkouts();
   }
 };
 </script>

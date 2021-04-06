@@ -12,7 +12,8 @@
       <p>
         {{ header }}
       </p>
-      <v-icon>mdi-plus</v-icon>
+      <exercise-modal v-if="header == 'Exercise'"
+      :filteredMuscles="filteredMuscles" />
     </v-card-title>
     <v-expansion-panels>
       <v-expansion-panel v-for="muscle in filteredMuscles" :key="muscle">
@@ -69,7 +70,7 @@ export default {
   methods: {
     ...mapActions(["addExerciseToWorkout"]),
     addExercise(itemID) {
-      if (this.currentWorkout.order.includes(itemID)) {
+      if (this.currentWorkout && this.currentWorkout.order.includes(itemID)) {
         this.isAlerted = true;
         setTimeout(() => (this.isAlerted = false), 2000);
       } else {
