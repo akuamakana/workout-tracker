@@ -8,8 +8,11 @@ var firebaseConfig = {
   projectId: "workout-tracker-94b1b",
   storageBucket: "workout-tracker-94b1b.appspot.com",
   messagingSenderId: "432283812347",
-  appId: "1:432283812347:web:5ae44682f3144754f4cb5e",
+  appId: "1:432283812347:web:5ae44682f3144754f4cb5e"
 };
 
+!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : "";
 // Initialize Firebase
-export const db = firebase.initializeApp(firebaseConfig).firestore();
+// export const db = firebase.initializeApp(firebaseConfig).firestore();
+export const auth = firebase.auth();
+export const db = firebase.firestore();
