@@ -41,7 +41,7 @@
                 <v-col>
                   <p>{{ exercise.referenceID.name }}</p>
                 </v-col>
-                <v-col cols="2" md="1">
+                <v-col cols="2" sm="1">
                   <v-btn :small="$vuetify.breakpoint.mobile" color="error">
                     <v-icon @click="deleteExerciseFromWorkout(exercise)">
                       mdi-delete

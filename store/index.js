@@ -34,7 +34,7 @@ export const actions = {
         .doc(state.userID)
         .collection("workouts")
         .where("timestamp", ">=", new Date(state.date + " 00:00"))
-        .where("timestamp", "<=", new Date(state.date + " 23:59"))
+        .where("timestamp", "<=", new Date(state.date + " 23:59:59"))
     );
     // Bind currentWorkoutExercises with id
     if (state.currentWorkout[0]) {
@@ -79,7 +79,8 @@ export const actions = {
     async ({ state, dispatch }, exerciseID) => {
       // Add exercise to workout
       if (state.currentWorkout[0]) {
-        db.collection("users")
+        await db
+          .collection("users")
           .doc(state.userID)
           .collection("workouts")
           .doc(state.currentWorkout[0].id)
@@ -93,7 +94,8 @@ export const actions = {
               .doc(exerciseID)
           });
         if ("order" in state.currentWorkout[0]) {
-          db.collection("users")
+          await db
+            .collection("users")
             .doc(state.userID)
             .collection("workouts")
             .doc(state.currentWorkout[0].id)
@@ -104,7 +106,7 @@ export const actions = {
       } else {
         // Create new workout
         const newDate = firebase.firestore.Timestamp.fromDate(
-          new Date(state.date + "T00:00-0800")
+          new Date(state.date + "T00:00:00")
         );
         await db
           .collection("users")
