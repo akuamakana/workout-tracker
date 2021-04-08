@@ -30,6 +30,8 @@ export const actions = {
     await bindFirestoreRef(
       "currentWorkout",
       db
+        .collection("users")
+        .doc(state.userID)
         .collection("workouts")
         .where("timestamp", ">=", new Date(state.date + " 00:00"))
         .where("timestamp", "<=", new Date(state.date + " 23:59"))
@@ -39,6 +41,8 @@ export const actions = {
       await bindFirestoreRef(
         "currentWorkoutExercises",
         db
+          .collection("users")
+          .doc(state.userID)
           .collection("workouts")
           .doc(state.currentWorkout[0].id)
           .collection("workout")
@@ -51,11 +55,23 @@ export const actions = {
   }),
 
   // Bind exercises and workouts
-  bindExercises: firestoreAction(async ({ bindFirestoreRef }) => {
-    await bindFirestoreRef("exercises", db.collection("exercises"));
+  bindExercises: firestoreAction(async ({ bindFirestoreRef, state }) => {
+    await bindFirestoreRef(
+      "exercises",
+      db
+        .collection("users")
+        .doc(state.userID)
+        .collection("exercises")
+    );
   }),
-  bindWorkouts: firestoreAction(async ({ bindFirestoreRef }) => {
-    await bindFirestoreRef("workouts", db.collection("saved-workouts"));
+  bindWorkouts: firestoreAction(async ({ bindFirestoreRef, state }) => {
+    await bindFirestoreRef(
+      "workouts",
+      db
+        .collection("users")
+        .doc(state.userID)
+        .collection("saved-workouts")
+    );
   }),
 
   // Exercise to workout controller
@@ -63,15 +79,23 @@ export const actions = {
     async ({ state, dispatch }, exerciseID) => {
       // Add exercise to workout
       if (state.currentWorkout[0]) {
-        db.collection("workouts")
+        db.collection("users")
+          .doc(state.userID)
+          .collection("workouts")
           .doc(state.currentWorkout[0].id)
           .collection("workout")
           .add({
             exerciseID: exerciseID,
-            referenceID: db.doc("exercises/" + exerciseID)
+            referenceID: db
+              .collection("users")
+              .doc(state.userID)
+              .collection("exercises")
+              .doc(exerciseID)
           });
         if ("order" in state.currentWorkout[0]) {
-          db.collection("workouts")
+          db.collection("users")
+            .doc(state.userID)
+            .collection("workouts")
             .doc(state.currentWorkout[0].id)
             .update({
               order: [...state.currentWorkout[0].order, exerciseID]
@@ -82,17 +106,25 @@ export const actions = {
         const newDate = firebase.firestore.Timestamp.fromDate(
           new Date(state.date + "T00:00-0800")
         );
-        db.collection("workouts").add({
-          timestamp: newDate,
-          order: [exerciseID]
-        });
+        db.collection("users")
+          .doc(state.userID)
+          .collection("workouts")
+          .add({
+            timestamp: newDate,
+            order: [exerciseID]
+          });
         await dispatch("bindCurrentWorkout", { root: true });
-        db.collection("workouts")
+        db.collection("users")
+          .doc(state.userID)
+          .collection("workouts")
           .doc(state.currentWorkout[0].id)
           .collection("workout")
           .add({
             exerciseID: exerciseID,
-            referenceID: db.doc("exercises/" + exerciseID)
+            referenceID: db
+              .collection("users")
+              .doc(state.userID)
+              .doc("exercises/" + exerciseID)
           });
       }
     }
@@ -100,6 +132,8 @@ export const actions = {
   deleteExerciseFromWorkout: firestoreAction(async ({ state }, exercise) => {
     const { id, exerciseID } = exercise;
     await db
+      .collection("users")
+      .doc(state.userID)
       .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
@@ -109,6 +143,8 @@ export const actions = {
     const updatedOrder = [...state.currentWorkout[0].order];
     updatedOrder.splice(updatedOrder.indexOf(exerciseID), 1);
     await db
+      .collection("users")
+      .doc(state.userID)
       .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .update({
@@ -118,7 +154,9 @@ export const actions = {
 
   // Set to exercise controller
   addSetToExercise: firestoreAction(({ state }, payload) => {
-    db.collection("workouts")
+    db.collection("users")
+      .doc(state.userID)
+      .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
       .doc(payload.exerciseID)
@@ -130,7 +168,9 @@ export const actions = {
       });
   }),
   updateSet: firestoreAction(({ state }, payload) => {
-    db.collection("workouts")
+    db.collection("users")
+      .doc(state.userID)
+      .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
       .doc(payload.exerciseID)
@@ -139,7 +179,9 @@ export const actions = {
       .update({ weight: payload.weight, reps: payload.reps });
   }),
   deleteSetFromExercise: firestoreAction(({ state }, payload) => {
-    db.collection("workouts")
+    db.collection("users")
+      .doc(state.userID)
+      .collection("workouts")
       .doc(state.currentWorkout[0].id)
       .collection("workout")
       .doc(payload.exerciseID)
@@ -150,13 +192,18 @@ export const actions = {
 
   // Add exercise
   addExercise: firestoreAction(({ state }, payload) => {
-    db.collection("exercises").add({
-      name: payload.name,
-      muscle: payload.muscle.toLowerCase()
-    });
+    db.collection("users")
+      .doc(state.userID)
+      .collection("exercises")
+      .add({
+        name: payload.name,
+        muscle: payload.muscle.toLowerCase()
+      });
   }),
-  updateExercise: firestoreAction(({}, payload) => {
-    db.collection("exercises")
+  updateExercise: firestoreAction(({ state }, payload) => {
+    db.collection("users")
+      .doc(state.userID)
+      .collection("exercises")
       .doc(payload.exerciseID)
       .update({
         name: payload.name,

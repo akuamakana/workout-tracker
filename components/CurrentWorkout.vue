@@ -69,7 +69,6 @@ export default {
       auth
         .signOut()
         .then(() => {
-          console.log("signout");
           Cookies.remove("access_token");
           this.$router.push("/login");
         })

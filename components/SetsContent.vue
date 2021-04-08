@@ -62,6 +62,8 @@ export default {
     this.$bind(
       "sets",
       db
+        .collection("users")
+        .doc(this.$store.state.userID)
         .collection("workouts")
         .doc(cwID)
         .collection("workout")
