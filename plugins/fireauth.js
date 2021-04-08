@@ -10,6 +10,7 @@ export default context => {
         auth.currentUser.getIdToken(true).then(token => {
           Cookies.set("access_token", token);
         });
+        store.commit("setUserId", user.uid);
       } else {
         Cookies.remove("access_token");
       }

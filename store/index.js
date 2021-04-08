@@ -9,13 +9,17 @@ export const state = () => ({
   exercises: [],
   workouts: [],
   sortOrder: [],
-  date: null
+  date: null,
+  userID: ""
 });
 
 export const mutations = {
   ...vuexfireMutations,
   setDate(state, date) {
     state.date = date;
+  },
+  setUserId(state, id) {
+    state.userID = id;
   }
 };
 
