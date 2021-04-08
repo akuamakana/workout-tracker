@@ -1,5 +1,9 @@
 <template>
-  <v-card style="overflow:auto" height="1000px">
+  <v-card
+    style="overflow:auto"
+    :height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+    :max-height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+  >
     <workout-box header="Exercise" :items="exercises" />
     <!-- <workout-box header="Workout" :items="workouts" /> -->
   </v-card>

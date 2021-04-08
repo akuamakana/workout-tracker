@@ -6,10 +6,10 @@
       align="center"
       align-content="center"
     >
-      <v-col cols="4">
+      <v-col class="d-none d-md-flex" cols="4">
         <tool-box />
       </v-col>
-      <v-col cols="7">
+      <v-col cols="12" sm="12" md="7">
         <current-workout />
       </v-col>
     </v-row>
@@ -32,7 +32,7 @@ export default {
         redirect("/login");
       }
     }
-  },
+  }
 };
 </script>
 

@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <v-card height="1000px" max-height="1000px">
+    <v-card
+      :height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+      :max-height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+    >
       <!-- Card title -->
       <v-card-title class="d-flex justify-space-between mb-n8">
         <v-col>
