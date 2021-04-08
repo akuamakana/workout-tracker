@@ -26,12 +26,13 @@
                           :rules="loginEmailRules"
                           label="E-mail"
                           required
+                          @keyup.enter="validate"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
                           v-model="loginPassword"
-                          :append-icon="show1 ? 'eye' : 'eye-off'"
+                          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                           :rules="[rules.required, rules.min]"
                           :type="show1 ? 'text' : 'password'"
                           name="input-10-1"
@@ -39,16 +40,28 @@
                           hint="At least 8 characters"
                           counter
                           @click:append="show1 = !show1"
+                          @keyup.enter="validate"
                         ></v-text-field>
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="6" xsm="12"> </v-col>
                       <v-spacer></v-spacer>
                       <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
-                        <v-btn x-large block @click="anonLogin">
-                          <v-icon>
-                            mdi-incognito
-                          </v-icon>
-                        </v-btn>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              v-bind="attrs"
+                              v-on="on"
+                              x-large
+                              block
+                              @click="anonLogin"
+                            >
+                              <v-icon>
+                                mdi-incognito
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Login Anonymously</span>
+                        </v-tooltip>
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
                         <v-btn
@@ -130,6 +143,8 @@
 
 <script>
 import { auth } from "@/firebase/db.js";
+import { exercises } from "@/helpers/new_exercises.js";
+import { mapActions, mapMutations } from "vuex";
 export default {
   computed: {
     passwordMatch() {
@@ -137,11 +152,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["addExercise"]),
+    ...mapMutations(["setUserId"]),
     validate() {
       if (this.$refs.loginForm.validate()) {
         auth
           .signInWithEmailAndPassword(this.loginEmail, this.loginPassword)
-          .then(() => {
+          .then(result => {
+            this.createNewExercises(result);
             alert("Signed in successfully!");
             this.$router.push("/");
           })
@@ -151,7 +169,8 @@ export default {
       } else if (this.$refs.registerForm.validate()) {
         auth
           .createUserWithEmailAndPassword(this.email, this.password)
-          .then(() => {
+          .then(result => {
+            this.createNewExercises(result);
             alert("Signed up successfully!");
             this.$router.push("/");
           })
@@ -179,10 +198,24 @@ export default {
     anonLogin() {
       auth
         .signInAnonymously()
-        .then(() => {
+        .then(result => {
+          this.createNewExercises(result);
           this.$router.push("/");
         })
         .catch(error => alert(error.message));
+    },
+    createNewExercises(user) {
+      const uid = user.user.uid;
+      const isNewUser = user.additionalUserInfo.isNewUser;
+      if (isNewUser) {
+        this.setUserId(uid);
+        exercises.forEach(exercise => {
+          this.addExercise({
+            name: exercise.name,
+            muscle: exercise.muscle
+          });
+        });
+      }
     }
   },
   data: () => ({

@@ -106,7 +106,8 @@ export const actions = {
         const newDate = firebase.firestore.Timestamp.fromDate(
           new Date(state.date + "T00:00-0800")
         );
-        db.collection("users")
+        await db
+          .collection("users")
           .doc(state.userID)
           .collection("workouts")
           .add({
@@ -114,7 +115,8 @@ export const actions = {
             order: [exerciseID]
           });
         await dispatch("bindCurrentWorkout", { root: true });
-        db.collection("users")
+        await db
+          .collection("users")
           .doc(state.userID)
           .collection("workouts")
           .doc(state.currentWorkout[0].id)
@@ -124,7 +126,8 @@ export const actions = {
             referenceID: db
               .collection("users")
               .doc(state.userID)
-              .doc("exercises/" + exerciseID)
+              .collection("exercises")
+              .doc(exerciseID)
           });
       }
     }

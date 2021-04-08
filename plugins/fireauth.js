@@ -12,6 +12,7 @@ export default context => {
         });
         store.commit("setUserId", user.uid);
       } else {
+        store.commit("setUserId", "");
         Cookies.remove("access_token");
       }
       return resolve();
