@@ -8,8 +8,8 @@
       type="error"
       >Already in current workout</v-alert
     >
-    <v-card-title class="d-flex justify-space-between">
-      <p>
+    <v-card-title class="d-flex justify-space-between align-center">
+      <p class="mb-0">
         {{ header }}
       </p>
       <exercise-modal

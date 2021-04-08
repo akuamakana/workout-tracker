@@ -6,6 +6,13 @@
       </v-icon>
     </v-btn>
     <v-dialog v-model="dialog" max-width="600px">
+      <v-container class="d-md-none" style="display:grid; place-items: end">
+        <v-btn small class="px-0" min-width="36px" @click="dialog = false">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </v-container>
       <tool-box />
     </v-dialog>
   </v-layout>
