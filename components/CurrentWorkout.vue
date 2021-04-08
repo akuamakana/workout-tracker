@@ -6,15 +6,17 @@
     >
       <!-- Card title -->
       <v-card-title class="d-flex justify-space-between mb-n8">
-        <v-col>
-          <p>
-            Workout
-          </p>
-          <v-btn color="red" @click="logout">Logout</v-btn>
-        </v-col>
-        <v-col cols="5">
-          <date-picker></date-picker>
-        </v-col>
+        <v-container>
+          <v-row justify="space-between" align="center">
+            <v-col cols="8" lg="5">
+              <date-picker></date-picker>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="d-flex justify-end">
+              <v-btn color="red" x-small @click="logout">Logout</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-title>
 
       <!-- Card contents -->
@@ -35,22 +37,34 @@
         >
           <v-card-title class="mb-n8">
             <v-container class="d-flex justify-space-between align-center">
-              <p>{{ exercise.referenceID.name }} - {{ exercise.exerciseID }}</p>
-              <v-btn color="error">
-                <v-icon @click="deleteExerciseFromWorkout(exercise)">
-                  mdi-delete
-                </v-icon>
-              </v-btn>
+              <v-row justify="space-between">
+                <v-col>
+                  <p>{{ exercise.referenceID.name }}</p>
+                </v-col>
+                <v-col cols="2" md="1">
+                  <v-btn :small="$vuetify.breakpoint.mobile" color="error">
+                    <v-icon @click="deleteExerciseFromWorkout(exercise)">
+                      mdi-delete
+                    </v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-container>
           </v-card-title>
-          <sets-content
-            v-if="currentWorkout"
-            :exercise="exercise"
-            :exerciseID="exercise.id"
-            :currentWorkoutID="currentWorkout.id"
-          />
+
+          <v-container>
+            <v-row>
+              <v-col>
+                <sets-content
+                  v-if="currentWorkout"
+                  :exercise="exercise"
+                  :exerciseID="exercise.id"
+                  :currentWorkoutID="currentWorkout.id"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
-        <sets-modal />
       </v-container>
       <v-container class="d-flex my-4" style="justify-content:center">
         <toolbox-modal />

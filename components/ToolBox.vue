@@ -4,6 +4,13 @@
     :height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
     :max-height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
   >
+    <v-container class="d-md-none" style="display:grid; place-items: end">
+      <v-btn small class="px-0" min-width="36px">
+        <v-icon>
+          mdi-close
+        </v-icon>
+      </v-btn>
+    </v-container>
     <workout-box header="Exercise" :items="exercises" />
     <!-- <workout-box header="Workout" :items="workouts" /> -->
   </v-card>

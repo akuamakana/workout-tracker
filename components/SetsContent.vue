@@ -2,34 +2,30 @@
   <v-container>
     <v-row align="center">
       <!-- Display sets -->
-      <v-col v-if="sets" cols="2" v-for="(set, i) in sets" :key="set.id">
-        <v-container>
-          <v-btn
-            style="height: auto"
-            text
-            x-large
-            @click="editSet(set.id)"
-            class="px-0"
-          >
-            <div>
-              <p class="mb-0 pb-2 text-left text--secondary">Set {{ i }}</p>
-              <p class="mb-0 pb-2 text-left">
-                {{ set.weight ? set.weight : "-" }} LBS
-              </p>
-              <p class="mb-0 text-left">{{ set.reps ? set.reps : "-" }} REPS</p>
-            </div>
-          </v-btn>
-        </v-container>
+      <v-col lg="2" v-if="sets" v-for="(set, i) in sets" :key="set.id">
+        <v-btn
+          style="height: auto"
+          text
+          x-large
+          @click="editSet(set.id)"
+          class="px-0"
+        >
+          <div>
+            <p class="mb-0 pb-2 text-left text--secondary">Set {{ i + 1 }}</p>
+            <p class="mb-0 pb-2 text-left">
+              {{ set.weight ? set.weight : "-" }} LBS
+            </p>
+            <p class="mb-0 text-left">{{ set.reps ? set.reps : "-" }} REPS</p>
+          </div>
+        </v-btn>
       </v-col>
       <!-- Add set to exercise button -->
-      <v-col>
-        <v-container>
-          <v-btn x-large @click="modalAction">
-            <v-icon dark>
-              mdi-plus
-            </v-icon>
-          </v-btn>
-        </v-container>
+      <v-col lg="2">
+        <v-btn x-large @click="modalAction">
+          <v-icon dark>
+            mdi-plus
+          </v-icon>
+        </v-btn>
       </v-col>
     </v-row>
     <!-- Open modal for set add/change -->
