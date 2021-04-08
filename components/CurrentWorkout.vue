@@ -7,7 +7,7 @@
           <p>
             Workout
           </p>
-          <v-btn color="success" @click="logout">Logout</v-btn>
+          <v-btn color="red" @click="logout">Logout</v-btn>
         </v-col>
         <v-col cols="5">
           <date-picker></date-picker>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-container class="d-flex justify-center">
-      <v-card max-width="600px" min-width="360px">
+    <v-container class="d-grid">
+      <v-card class="mx-auto" max-width="600px" min-width="360px">
         <div>
           <v-tabs
             v-model="tab"
@@ -43,6 +43,13 @@
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="6" xsm="12"> </v-col>
                       <v-spacer></v-spacer>
+                      <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
+                        <v-btn x-large block @click="anonLogin">
+                          <v-icon>
+                            mdi-incognito
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
                       <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
                         <v-btn
                           x-large
@@ -168,6 +175,14 @@ export default {
         .catch(error => {
           alert(error.message);
         });
+    },
+    anonLogin() {
+      auth
+        .signInAnonymously()
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(error => alert(error.message));
     }
   },
   data: () => ({
@@ -199,3 +214,11 @@ export default {
   })
 };
 </script>
+
+<style>
+.d-grid {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+</style>
