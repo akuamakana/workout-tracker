@@ -106,7 +106,7 @@ export const actions = {
       } else {
         // Create new workout
         const newDate = firebase.firestore.Timestamp.fromDate(
-          new Date(state.date + "T00:00:00")
+          new Date(state.date + "T12:00:00")
         );
         await db
           .collection("users")

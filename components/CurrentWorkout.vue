@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-card
-      :height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
-      :max-height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+      :height="$vuetify.breakpoint.mobile ? '100vh' : '90vh'"
+      :max-height="$vuetify.breakpoint.mobile ? '100vh' : '90vh'"
     >
       <!-- Card title -->
       <v-card-title class="d-flex justify-space-between mb-n8">
@@ -20,7 +20,7 @@
       </v-card-title>
 
       <!-- Card contents -->
-      <v-container style="overflow:auto" v-if="currentWorkoutExercises">
+      <v-container style="overflow: auto" v-if="currentWorkoutExercises">
         <v-card
           v-for="(exercise, i) in [...currentWorkoutExercises].sort((a, b) => {
             if (currentWorkout.order) {
@@ -66,7 +66,7 @@
           </v-container>
         </v-card>
       </v-container>
-      <v-container class="d-flex my-4" style="justify-content:center">
+      <v-container class="d-flex my-4" style="justify-content: center">
         <toolbox-modal />
       </v-container>
     </v-card>
@@ -89,13 +89,13 @@ export default {
           Cookies.remove("access_token");
           this.$router.push("/login");
         })
-        .catch(error => {
+        .catch((error) => {
           alert(error.message);
         });
-    }
+    },
   },
   computed: {
-    ...mapGetters(["currentWorkoutExercises", "currentWorkout"])
+    ...mapGetters(["currentWorkoutExercises", "currentWorkout"]),
   },
   async mounted() {
     try {
@@ -104,7 +104,7 @@ export default {
     } catch (e) {
       console.error(e);
     }
-  }
+  },
 };
 </script>
 

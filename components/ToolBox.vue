@@ -1,8 +1,8 @@
 <template>
   <v-card
-    style="overflow:auto"
-    :height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
-    :max-height="$vuetify.breakpoint.mobile ? '100vh' : '1000px'"
+    style="overflow: auto"
+    :height="$vuetify.breakpoint.mobile ? '100vh' : 'auto'"
+    :max-height="$vuetify.breakpoint.mobile ? '100vh' : '90vh'"
   >
     <workout-box header="Exercise" :items="exercises" />
     <!-- <workout-box header="Workout" :items="workouts" /> -->
@@ -13,15 +13,15 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   methods: {
-    ...mapActions(["bindExercises", "bindWorkouts"])
+    ...mapActions(["bindExercises", "bindWorkouts"]),
   },
   computed: {
-    ...mapGetters(["exercises", "workouts"])
+    ...mapGetters(["exercises", "workouts"]),
   },
   async mounted() {
     await this.bindExercises();
     await this.bindWorkouts();
-  }
+  },
 };
 </script>
 
